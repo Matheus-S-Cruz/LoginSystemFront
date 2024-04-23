@@ -40,7 +40,7 @@ function Cadastro() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await axios.post('http://localhost:8090/api', novoUsuario);
+      await axios.post('http://localhost:8090/api/cadastro', novoUsuario);
       fetchUsuario();
       setNovoUsuario({
         username: '',
