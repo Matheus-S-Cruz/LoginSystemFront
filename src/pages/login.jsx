@@ -36,7 +36,7 @@ function Login() {
     };
     return (
         <div className='div'>
-            <h1>Login System do Matheus</h1>
+            <h1>Login System de Matheus</h1>
             <form>
                 <label>
                     Usuário:

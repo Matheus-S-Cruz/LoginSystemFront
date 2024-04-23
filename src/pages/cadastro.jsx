@@ -3,37 +3,54 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import '../App.css'
 
-const irParaLogin = useNavigate();
-const handleClick = () => {
-    irParaLogin('/');
-};
-
 function Cadastro() {
   const [usuario, setUsuario] = useState([]);
   const [novoUsuario, setNovoUsuario] = useState({
-  username: '',
-  password: '',
-});
+    username: '',
+    password: '',
+  });
+
+  const irParaHome = useNavigate();
+
+  const handleClick = () => {
+    irParaHome('/');
+  };
 
   useEffect(() => {
-   fetchUsuario();
-  }, []);
-}
-
-//POST
-const handleSubmit = async (event) => {
-  event.preventDefault();
-  try {
-    await axios.post('http://localhost:8090/api/login', novoUsuario);
     fetchUsuario();
-    setNovoUsuario({
-      username: '',
-      password: '',
-    });
-  } catch (error) {
-    console.error('Erro ao criar Usuario:', error);
-  }
+  }, []);
+
+  const fetchUsuario = async () => {
+    try {
+      const response = await axios.get('http://localhost:8090/api');
+      setUsuario(response.data);
+    } catch (error) {
+      console.error('Erro ao buscar usuario:', error);
+    }
+  };
   
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setNovoUsuario((prevUsuario) => ({
+      ...prevUsuario,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      await axios.post('http://localhost:8090/api', novoUsuario);
+      fetchUsuario();
+      setNovoUsuario({
+        username: '',
+        password: '',
+      });
+    } catch (error) {
+      console.error('Erro ao criar Usuario:', error);
+    }
+  }
+
   return (
     <div>
       <h1>Cadastro de Usuarios</h1>
@@ -42,14 +59,14 @@ const handleSubmit = async (event) => {
         <input
           type="text"
           name="username"
-          placeholder=  "username"
+          placeholder="username"
           value={novoUsuario.username}
           onChange={handleInputChange}
         />
         <input
           type="number" 
           name="password"
-          placeholder=  "password"
+          placeholder="password"
           value={novoUsuario.password}
           onChange={handleInputChange}
         />
@@ -57,11 +74,10 @@ const handleSubmit = async (event) => {
       </form>
   
       <button onClick={handleClick}>
-            Voltar
-        </button>
+        Voltar
+      </button>
     </div>
   );
-
 };
 
 export default Cadastro;
