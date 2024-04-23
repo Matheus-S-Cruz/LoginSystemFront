@@ -29,12 +29,12 @@ function Login() {
 
     const handleLogin = async () => {
         try {
-            const response = await logar(username, password);
-            alert(response);
+            const response = await logar(username, password);            
             if (response == true){
                 navigate('/home');
-            } else{
-                console.error('Erro ao se logar:', error);
+            }
+            else{
+                alert(response)
             }
         } catch (error) {
             console.error('Erro ao se logar:', error);
