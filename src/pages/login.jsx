@@ -19,17 +19,23 @@ const logar = async (username, password) => {
 
 function Login() {
 
-    const irParaCadastro = useNavigate();
+    const navigate = useNavigate(); // Use navigate para redirecionamento
     const handleClick = () => {
-        irParaCadastro('/cadastro');
+        navigate('/cadastro');
     };
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+
     const handleLogin = async () => {
         try {
             const response = await logar(username, password);
             alert(response);
+            if (response == true){
+                navigate('/home');
+            } else{
+                console.error('Erro ao se logar:', error);
+            }
         } catch (error) {
             console.error('Erro ao se logar:', error);
         }
