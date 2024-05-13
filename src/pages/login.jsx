@@ -1,75 +1,33 @@
-import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import '../App.css'
-
-
-
-const logar = async (username, password) => {
-    try {
-        const response = await axios.post('http://localhost:8090/api/login', {
-            username: username,
-            password: password,
-        });
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
-};
-
+import Formulario from '../components/Formulario'; // Importe o componente Formulário
 function Login() {
+  const irPara = useNavigate();
+  let username = '';
+  let password = '';
 
-    const navigate = useNavigate(); // Use navigate para redirecionamento
-    const handleClick = () => {
-        navigate('/cadastro');
-    };
-
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-
-    const handleLogin = async () => {
-        try {
-            const response = await logar(username, password);            
-            if (response == true){
-                navigate('/home');
-            }
-            else{
-                alert(response)
-            }
-        } catch (error) {
-            console.error('Erro ao se logar:', error);
+  function handleLogin() {
+    // Lógica de autenticação aqui, usando Axios
+    axios.post('http://localhost:8090/api/login', { username, password })
+      .then(response => {
+        if (response.data === true) {
+          irPara('/home');
+        } else {
+          alert('Falha ao se logar');
         }
-    };
-    return (
-        <div className='div'>
-            <h1>Login System de Matheus</h1>
-            <form>
-                <label>
-                    Usuário:
-                    <input
-                        type="text"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                    />
-                </label>
-                <br />
-                <label>
-                    Senha:
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                </label>
-                <br />
-                <button type="button" onClick={handleLogin}>
-                    Login
-                </button>
-            </form>
-            <button onClick={handleClick}>
-                Cadastrar Um Usuário
-            </button>
-        </div>
-    );
+      });
+  }
+
+  const inputs = [
+    { type: 'text', placeholder: 'Username', onChange: (e) => username = e.target.value },
+    { type: 'password', placeholder: 'Password', onChange: (e) => password = e.target.value }
+  ];
+
+  return (
+    <Formulario inputs={inputs} onSubmit={handleLogin}>
+      <button type="submit">Logar</button>
+      <button type="button" onClick={() => irPara('/cadastro')}>Cadastre-se</button>
+    </Formulario>
+  );
 }
 export default Login;
